@@ -1,31 +1,23 @@
 package middlewares
 
 import (
-	"net/http"
 	"cvwo-backend/api/utils"
-	"strings"
+	"log"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 )
 
 // AuthMiddleware is used to protect routes with JWT authentication
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		authHeader := c.GetHeader("Authorization")
-		if authHeader == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header required"})
-			c.Abort()
-			return
+		
+		tokenString, err := c.Cookie("jwt")
+		if(err != nil){
+			log.Print(err)
 		}
-
-		// Extract token from "Bearer token"
-		tokenParts := strings.Split(authHeader, " ")
-		if len(tokenParts) != 2 {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid authorization format"})
-			c.Abort()
-			return
-		}
-		tokenString := tokenParts[1]
-
+		
+		
 		// Verify the token
 		claims, err := utils.VerifyJWT(tokenString)
 		if err != nil {
@@ -33,10 +25,9 @@ func AuthMiddleware() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-
 		// Attach the claims to the context for further use
-		c.Set("user", claims["username"])
-
+		c.Set("userId", claims["userId"])
+		log.Print("userId: ", claims["userId"])
 		c.Next()
 	}
 }

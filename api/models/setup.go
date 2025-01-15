@@ -3,9 +3,10 @@ package models
 import (
 	"log"
 	"os"
-  "gorm.io/gorm"
-  "gorm.io/driver/postgres"
-  "github.com/joho/godotenv"
+
+	"github.com/joho/godotenv"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
@@ -21,7 +22,7 @@ func ConnectDatabase() {
                 panic("Failed to connect to database!")
         }
 
-        err = database.AutoMigrate(&User{})
+        err = database.Debug().AutoMigrate(&User{}, &Post{}, &Comment{})
         if err != nil {
                 log.Fatal("Error migrating DB", err)
         }

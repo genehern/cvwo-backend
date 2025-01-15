@@ -8,13 +8,13 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-var SecretKey = []byte(os.Getenv("JWT_SECRET_KEY")) // Secret key for signing JWT
+var SecretKey = []byte(os.Getenv("JWT_SECRET_KEY")) 
 
 // GenerateJWT generates a new JWT token
-func GenerateJWT(username string) (string, error) {
+func GenerateJWT(userId int) (string, error) {
 	claims := jwt.MapClaims{
-		"username": username,
-		"exp":      time.Now().Add(time.Hour * 24).Unix(), // expires in 24 hours
+		"userId": userId,
+		"exp":    time.Now().Add(time.Hour * 24).Unix(), 
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
