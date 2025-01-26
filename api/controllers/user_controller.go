@@ -15,8 +15,7 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	// Insert user into the database
-	if err := models.CreateUser(models.DB, &user); err != nil {
+	if err := models.CreateUser( &user); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -32,7 +31,7 @@ func Login(c *gin.Context){
 		return
 	}
 	
-	if err := models.ValidateUser(models.DB, &user); err!=nil { // Placeholder validation
+	if err := models.ValidateUser( &user); err!=nil { 
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

@@ -2,9 +2,9 @@ package controllers
 
 import (
 	"cvwo-backend/api/models"
+	"cvwo-backend/api/utils"
 	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -17,11 +17,11 @@ func CreatePost(c *gin.Context) {
 		return
 	}
 
-	userId, _ := c.Get("userId")
+	userId, _:= c.Get("userId")
 
 	newPost.UserID = int(userId.(float64))
-	log.Print(newPost)
-	if err := models.CreatePost(models.DB, &newPost); err != nil {
+	log.Print(newPost.Content)
+	if err := models.CreatePost(&newPost); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -30,12 +30,9 @@ func CreatePost(c *gin.Context) {
 }
 
 func GetPosts(c *gin.Context){	
-		log.Print("re")
-		pageNumStr := c.DefaultQuery("pageNum", "1")
-		limitNumStr := c.DefaultQuery("limitNum", "10")
-		pageNum, _ := strconv.Atoi(pageNumStr)
-		limitNum, _ := strconv.Atoi(limitNumStr)
-		posts, err := models.GetPostByTags(models.DB, pageNum, limitNum)
+	
+		pageNum, limitNum := utils.GetPaginationParam(c)
+		posts, err := models.GetPost(pageNum, limitNum)
 		if err != nil {
 			c.JSON(500, gin.H{"error": "Error fetching posts"})
 			return
@@ -43,5 +40,6 @@ func GetPosts(c *gin.Context){
 
 		c.JSON(200, posts)
 }
+
 
 

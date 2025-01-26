@@ -22,7 +22,7 @@ func ConnectDatabase() {
                 panic("Failed to connect to database!")
         }
 
-        err = database.Debug().AutoMigrate(&User{}, &Post{}, &Comment{})
+        err = database.Debug().AutoMigrate(&User{}, &Post{}, &Comment{}, &CommentVote{})
         if err != nil {
                 log.Fatal("Error migrating DB", err)
         }
