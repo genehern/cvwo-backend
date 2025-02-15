@@ -37,8 +37,6 @@ func GetUserIdMiddleware() gin.HandlerFunc {
 		if(err != nil){
 			log.Print(err)
 		}
-		
-		
 		// Verify the token
 		claims, err := utils.VerifyJWT(tokenString)
 		if err != nil {

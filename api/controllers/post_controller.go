@@ -31,18 +31,13 @@ func GetPosts(c *gin.Context){
 	
 		pageNum, limitNum := utils.GetPaginationParam(c)
 		posts, err := models.GetPost(pageNum, limitNum)
+		userId := utils.GetUserId(c)
 		if err != nil {
 			c.JSON(500, gin.H{"error": "Error fetching posts"})
 			return
 		}
 
-		userId, exist := c.Get("userId")
-		if !exist{
-			userId = 0;
-		}
-		value, _ := userId.(int)
-
-		res := utils.VotesAggregation(posts, value)
+		res := utils.VotesAggregation(posts, userId)
 		c.JSON(200, res)
 }
 

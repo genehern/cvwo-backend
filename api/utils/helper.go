@@ -3,7 +3,6 @@ package utils
 import (
 	"cvwo-backend/api/dto"
 	"cvwo-backend/api/models"
-	"log"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -79,7 +78,6 @@ func VotesAggregation(posts []models.Post, userID int) []dto.PostDTO{
                 upvotes++
                 if vote.UserID == userID  {
                     isUpvoted = true
-                    log.Print(true)
                 }
             }
             if vote.Downvote {

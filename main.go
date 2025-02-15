@@ -15,8 +15,8 @@ func main() {
 	router := gin.Default()
 
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173"}, // React app URL
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}, // Allowed methods
+		AllowOrigins:     []string{"http://localhost:5173"}, 
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}, 
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
@@ -36,9 +36,7 @@ func main() {
 		voteGroup := protected.Group("/votes")
 		{
 			voteGroup.POST("/postVote", controllers.CreatePostVote)
-			//voteGroup.POST("/CommentVote", controllers.CreateCommentVote)
 			voteGroup.DELETE("/postVote", controllers.DeletePostVote)
-			//voteGroup.DELETE("/CommentVote", controllers.DeleteCommentVote)
 		}
 
 		commentsGroup := protected.Group("/comments")
