@@ -27,7 +27,25 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 		// Attach the claims to the context for further use
 		c.Set("userId", claims["userId"])
-		log.Print("userId: ", claims["userId"])
 		c.Next()
 	}
 }
+
+func GetUserIdMiddleware() gin.HandlerFunc {
+	return func(c*gin.Context) {
+		tokenString, err := c.Cookie("jwt")
+		if(err != nil){
+			log.Print(err)
+		}
+		
+		
+		// Verify the token
+		claims, err := utils.VerifyJWT(tokenString)
+		if err != nil {
+			c.Next()
+		}
+		c.Set("userId", claims["userId"])
+		c.Next()
+	}
+}
+

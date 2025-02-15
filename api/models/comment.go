@@ -30,7 +30,7 @@ func DeleteComment(id uint)error{
     return nil
 } 
 
-func GetComments( postID int, userID int, pageNum int, limitNum int) ([]Comment, error) {
+func GetComments( postID int, pageNum int, limitNum int) ([]Comment, error) {
 	var comments []Comment
 
 	if err := DB.Offset((pageNum - 1) * limitNum).Limit(limitNum).

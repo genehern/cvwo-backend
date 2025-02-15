@@ -3,7 +3,6 @@ package controllers
 import (
 	"cvwo-backend/api/models"
 	"cvwo-backend/api/utils"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -20,7 +19,6 @@ func CreatePost(c *gin.Context) {
 	userId, _:= c.Get("userId")
 
 	newPost.UserID = int(userId.(float64))
-	log.Print(newPost.Content)
 	if err := models.CreatePost(&newPost); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -38,7 +36,14 @@ func GetPosts(c *gin.Context){
 			return
 		}
 
-		c.JSON(200, posts)
+		userId, exist := c.Get("userId")
+		if !exist{
+			userId = 0;
+		}
+		value, _ := userId.(int)
+
+		res := utils.VotesAggregation(posts, value)
+		c.JSON(200, res)
 }
 
 

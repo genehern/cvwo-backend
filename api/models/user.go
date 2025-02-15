@@ -38,10 +38,10 @@ func ValidateUser( user *User) error{
 		return err // handle database error
 	}
 	if err == gorm.ErrRecordNotFound {
-		return fmt.Errorf("username '%s' not found", user.Username)
+		return fmt.Errorf("Username '%s' not found", user.Username)
 	}
 	if err:= bcrypt.CompareHashAndPassword([]byte(existingUser.Password), []byte(user.Password)); err!= nil{
-		return fmt.Errorf("wrong Password")
+		return fmt.Errorf("Wrong Password")
 	}
 	user.ID = existingUser.ID
 	return nil

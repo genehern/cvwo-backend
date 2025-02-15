@@ -49,10 +49,12 @@ func main() {
 
 	public := router.Group("/public")
 	{
+		public.Use(middlewares.GetUserIdMiddleware())
 		usersGroup := public.Group("/user")
 		{
 			usersGroup.POST("login", controllers.Login)
 			usersGroup.POST("createUser", controllers.CreateUser)
+			usersGroup.POST("logout", controllers.Logout)
 		}
 
 		postsGroup := public.Group("/posts")

@@ -11,6 +11,7 @@ type Post struct {
 	Content string `json:"content"`
 	CreatedAt time.Time `json:"created_at"`
 	PrimaryTag string `json:"primary_tag"`
+	Votes []PostVote `json:"votes"`
 }
 
 func CreatePost( newPost *Post) error {
@@ -29,8 +30,8 @@ func DeletePost( postId int) error{
 
 func GetPost( pageNum int, limitNum int) ([]Post, error) {
 	var posts []Post
-
-	if err := DB.Offset((pageNum - 1) * limitNum).Limit(limitNum).Find(&posts).Error; err != nil {
+	
+	if err := DB.Preload("Votes").Preload("User").Offset((pageNum - 1) * limitNum).Limit(limitNum).Find(&posts).Error; err != nil {
 		return nil, err
 	}
 

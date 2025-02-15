@@ -14,7 +14,8 @@ func CreatePostVote(c *gin.Context) {
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
-
+    userId, _:= c.Get("userId")
+    vote.UserID = int(userId.(float64))
     if err := models.CreatePostVote(&vote); err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
         return
