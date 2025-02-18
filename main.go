@@ -34,8 +34,10 @@ func main() {
 		}
 
 		voteGroup := protected.Group("/votes")
-		{
-			voteGroup.POST("/postVote", controllers.CreatePostVote)
+		{	
+			//POST Votes refer to votes for Post, not action.
+			voteGroup.GET("/postVote", controllers.CreatePostVote)
+			voteGroup.POST("/postVote", controllers.UpdatePostVote)
 			voteGroup.DELETE("/postVote", controllers.DeletePostVote)
 		}
 

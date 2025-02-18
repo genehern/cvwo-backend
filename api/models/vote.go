@@ -1,8 +1,6 @@
 package models
 
 import (
-	"log"
-
 	"gorm.io/gorm"
 )
 type PostVote struct {
@@ -25,7 +23,6 @@ type CommentVote struct {
 
 func CreatePostVote(vote *PostVote) error {
     var existingVote PostVote
-    log.Print(vote)
     if err := DB.Debug().Where("post_id = ? AND user_id = ?", vote.PostID, vote.UserID).First(&existingVote).Error; err == nil {
         if err := DB.Debug().Where("post_id = ? AND user_id = ?", vote.PostID, vote.UserID).Select("Upvote", "Downvote").Updates(PostVote{Upvote:vote.Upvote, Downvote: vote.Downvote}).Error; err != nil {
             return err
@@ -38,10 +35,23 @@ func CreatePostVote(vote *PostVote) error {
     return nil
 }
 
-
 func DeletePostVote(postID int, userID int) error {
     if err := DB.Where("post_id = ? AND user_id = ?", postID, userID).Delete(&PostVote{}).Error; err != nil {
         return err
+    }
+    return nil
+}
+
+func UpdatePostVote(vote *PostVote) error {
+    var existingVote PostVote
+    if err := DB.Debug().Where("post_id = ? AND user_id = ?", vote.PostID, vote.UserID).First(&existingVote).Error; err == nil {
+        if err := DB.Debug().Where("post_id = ? AND user_id = ?", vote.PostID, vote.UserID).Select("Upvote", "Downvote").Updates(PostVote{Upvote:vote.Upvote, Downvote: vote.Downvote}).Error; err != nil {
+            return err
+        }
+    } else if (err == gorm.ErrRecordNotFound){
+        if err := DB.Debug().Create(&vote).Error; err != nil {
+            return err
+        }
     }
     return nil
 }
